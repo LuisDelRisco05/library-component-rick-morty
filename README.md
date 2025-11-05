@@ -1,73 +1,48 @@
-# React + TypeScript + Vite
+# Tarjeta — Librería de componente (Prueba técnica)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Resumen**  
+Esta librería contiene un único componente reutilizable llamado **`Tarjeta`** implementado en **React + TypeScript** y estilado con **Material UI (MUI)**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Objetivo
 
-## React Compiler
+- Implementar un componente `Tarjeta` fiel al diseño entregado en Figma.
+- Empaquetar la librería para que sea consumible por otras aplicaciones.
+- Incluir pruebas unitarias (Vitest / Testing Library).
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+---
 
-## Expanding the ESLint configuration
+## 🔧 Tecnologías principales
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 (TypeScript)
+- Vite (build dev)
+- Material UI (MUI)
+- Vitest + @testing-library/react
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
+ Instalación local
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# desde la raíz del proyecto de la librería
+npm pack
+# en tu app consumidora
+npm install ../ruta/rick-morty-card-0.0.0.tgz
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Importar en una app
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+import { Tarjeta } from 'nombre-de-la-libreria';
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+<Tarjeta
+  name="Rick Sanchez"
+  species="Humano"
+  status="Vivo"
+  lastLocation="Earth (C-137)"
+  firstEpisode="Pilot"
+  image="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+/>
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Ejecutar tests:
+
+npm run test
+
+

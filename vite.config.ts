@@ -9,6 +9,7 @@ export default defineConfig({
       entry: "src/index.ts",
       name: "TarjetaLibrary",
       fileName: "tarjeta-library",
+      formats: ["es", "cjs"],
     },
     rollupOptions: {
       external: [
@@ -32,6 +33,11 @@ export default defineConfig({
     setupFiles: "./src/setupTests.ts",
     pool: "forks",
     include: ["src/**/*.test.{ts,tsx}"],
-    isolate: false, // 🧩 Evita procesos colgados de jsdom
+    isolate: false,
+    server: {
+      deps: {
+        inline: [/rick-morty-card/],
+      },
+    },
   },
 });

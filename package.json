@@ -2,12 +2,12 @@
   "name": "rick-morty-card",
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/tarjeta-library.umd.cjs",
+  "main": "dist/tarjeta-library.js",
   "module": "dist/tarjeta-library.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && copy src\\components\\tarjeta\\styles.css dist\\",
+    "build": "tsc -b && vite build && copy src\\components\\tarjeta\\styles.css dist\\ && copy src\\theme\\theme.ts dist\\",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run"

@@ -4,21 +4,21 @@ import {
   Card,
   CardContent,
   Typography,
-  Chip,
   Box,
   useTheme,
   Button,
 } from "@mui/material";
 import type { TarjetaProps } from "./Tarjeta.types";
-import { CloseCircle, FavoriteIcon, TickCircle } from "../common";
+import { ChipComponent, FavoriteIcon} from "../common";
 import { useIsMobileOrTablet } from "../../hooks/useIsMobile";
 
 export const Tarjeta: React.FC<TarjetaProps> = ({
+  id,
   name,
   species,
   status,
-  lastLocation,
-  firstEpisode,
+  location,
+  gender,
   image,
   variant = "vertical-normal",
   onFavoriteChange
@@ -27,12 +27,6 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
   const isMobile = useIsMobileOrTablet()
 
   const theme = useTheme();
-  const colorStatus =
-    status === "Vivo"
-      ? (theme.palette.primary as any).main
-      : status === "Muerto"
-      ? (theme.palette.secondary as any).main
-      : theme.palette.grey[500];
 
   return (
     <Card 
@@ -55,7 +49,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
           onClick={() => {
             const newValue = !isFavorite;
             setIsFavorite(newValue);
-            onFavoriteChange?.(newValue);
+            onFavoriteChange?.(id, newValue);
           }}
         >
           <FavoriteIcon
@@ -63,7 +57,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
             colorStar={
               isFavorite
                 ? (theme.palette.primary as any)[700]
-                : ((theme.palette.secondary as any) as any)[400]
+                : (theme.palette.secondary as any)[400]
             }
           />
         </Button>
@@ -87,28 +81,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
             </Typography>
             {
                 !isMobile && (
-                    <Chip
-                      icon={
-                        status === "Vivo" ? (
-                          <TickCircle color={`${(theme.palette.primary as any)[900]}`} />
-                        ) : (
-                          <CloseCircle color={(theme.palette.secondary as any)[800]} />
-                        )
-                      }
-                      label={status}
-                      className="Chip"
-                      sx={{
-                        gap: "8px",
-                        height: "32px",
-                        fontSize: "14px",
-                        paddingX: "8px",
-                        backgroundColor: colorStatus,
-                        color:
-                          status === "Vivo"
-                            ? (theme.palette.primary as any)[900]
-                            : (theme.palette.secondary as any)[800],
-                      }}
-                    />
+                  <ChipComponent status={status} theme={theme}  />  
                 )
             }
           </Box>
@@ -144,7 +117,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
                 fontWeight={500}
                 mt="8px"
               >
-                {lastLocation}
+                {location}
               </Typography>
             </Box>
             <Box width="50%">
@@ -156,7 +129,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
                 lineHeight="100%"
                 fontFamily="Montserrat"
               >
-                First seen in
+                gender
               </Typography>
               <Typography
                 fontFamily="Montserrat"
@@ -167,7 +140,7 @@ export const Tarjeta: React.FC<TarjetaProps> = ({
                 fontWeight={500}
                 mt="8px"
               >
-                {firstEpisode}
+                {gender}
               </Typography>
             </Box>
           </Box>

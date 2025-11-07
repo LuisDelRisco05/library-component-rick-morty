@@ -30,7 +30,8 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.ts",
-    pool: "threads",
+    pool: "forks",
     include: ["src/**/*.test.{ts,tsx}"],
+    isolate: false, // 🧩 Evita procesos colgados de jsdom
   },
 });

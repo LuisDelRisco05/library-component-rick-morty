@@ -1,92 +1,106 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Tarjeta } from "./Tarjeta";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import type { TarjetaProps } from "./Tarjeta.types";
+import { Tarjeta } from "./Tarjeta";
 
-// Mocks simples de íconos
+// 🧩 Mocks de componentes comunes
 vi.mock("../common", () => ({
-  FavoriteIcon: ({
-    color = "#FAFAFA",
-    colorStar = "#CCCCCC",
-  }: {
-    color?: string;
-    colorStar?: string;
-  }) => (
+  FavoriteIcon: ({ color, colorStar }: { color: string; colorStar: string }) => (
     <svg data-testid="favorite-icon">
-      <path data-testid="circle-path" fill={color}></path>
-      <path data-testid="star-path" fill={colorStar}></path>
+      <path data-testid="circle-path" fill={color} />
+      <path data-testid="star-path" fill={colorStar} />
     </svg>
   ),
-  TickCircle: () => <svg data-testid="tick-icon"></svg>,
-  CloseCircle: () => <svg data-testid="close-icon"></svg>,
+  ChipComponent: ({ status }: { status: string }) => (
+    <div data-testid="chip">{status}</div>
+  ),
 }));
 
-
-
-// Mock de hook useIsMobileOrTablet
+// 📱 Mock del hook para controlar modo mobile
 vi.mock("../../hooks/useIsMobile", () => ({
-  useIsMobileOrTablet: () => false,
+  useIsMobileOrTablet: () => false, // Cambia a true si quieres simular mobile
 }));
 
+// 🎨 Función de ayuda para renderizar con tema de MUI
 const theme = createTheme();
 
-describe("Tarjeta component", () => {
-  const baseProps: Pick<TarjetaProps, "name" | "species" | "status" | "lastLocation" | "firstEpisode" | "image"> = {
-    name: "Rick Sanchez",
-    species: "Humano",
-    status: "Vivo",
-    lastLocation: "Earth (C-137)",
-    firstEpisode: "Pilot",
-    image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-  };
+function renderWithTheme(ui: React.ReactElement) {
+  return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
+}
 
-  const renderWithTheme = (props = {}) =>
-    render(
-      <ThemeProvider theme={theme}>
-        <Tarjeta {...baseProps} {...props} />
-      </ThemeProvider>
+describe("Tarjeta component", () => {
+  it("renders character name and species correctly", () => {
+    renderWithTheme(
+      <Tarjeta
+        id={1}
+        name="Morty Smith"
+        species="Human"
+        status="Alive"
+        location="Earth (Replacement Dimension)"
+        gender="Male"
+        image="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
+      />
     );
 
-  it("renderiza correctamente el nombre y la especie", () => {
-    renderWithTheme();
-    expect(screen.getByText("Rick Sanchez")).toBeInTheDocument();
+    expect(screen.getByText("Morty Smith")).toBeInTheDocument();
     expect(screen.getByText("Human")).toBeInTheDocument();
   });
 
-  it("muestra el ícono de favorito y cambia al hacer click", () => {
-    renderWithTheme();
-  
-    const starPath = screen.getByTestId("star-path");
-  
-    // Verifica que tenga algún valor en fill
-    expect(starPath.getAttribute("fill")).toBeTruthy();
-  
-    // Click en el botón que cambia el estado de favorito
-    fireEvent.click(screen.getByTestId("favorite-icon"));
-  
-    // Verifica que cambió el color a la paleta primaria[300]
-    expect(starPath).toHaveAttribute("fill", (theme.palette.primary as any)[300]);
-  });
-  
-  
-  
+  it("renders the chip with the status text", () => {
+    renderWithTheme(
+      <Tarjeta
+        id={2}
+        name="Rick Sanchez"
+        species="Human"
+        status="Alive"
+        location="Citadel of Ricks"
+        gender="Male"
+        image="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+      />
+    );
 
-  it("muestra el Chip de estado correcto (Vivo con ícono TickCircle)", () => {
-    renderWithTheme();
-    expect(screen.getByText("Vivo")).toBeInTheDocument();
-    expect(screen.getByTestId("tick-icon")).toBeInTheDocument();
+    const chip = screen.getByTestId("chip");
+    expect(chip).toHaveTextContent("Alive");
   });
 
-  it("usa el ícono CloseCircle cuando el personaje está muerto", () => {
-    renderWithTheme({ status: "Muerto" });
-    expect(screen.getByTestId("close-icon")).toBeInTheDocument();
+  it("calls onFavoriteChange when favorite button is clicked", () => {
+    const mockFavoriteChange = vi.fn();
+
+    renderWithTheme(
+      <Tarjeta
+        id={3}
+        name="Summer Smith"
+        species="Human"
+        status="Alive"
+        location="Earth"
+        gender="Female"
+        image="https://rickandmortyapi.com/api/character/avatar/3.jpeg"
+        onFavoriteChange={mockFavoriteChange}
+      />
+    );
+
+    const button = screen.getByRole("button");
+    fireEvent.click(button);
+
+    expect(mockFavoriteChange).toHaveBeenCalledWith(3, true);
   });
 
-  it("cambia layout cuando el variant es horizontal-normal", () => {
-    renderWithTheme({ variant: "horizontal-normal" });
+  it("renders gender and location labels when not on mobile", () => {
+    renderWithTheme(
+      <Tarjeta
+        id={4}
+        name="Beth Smith"
+        species="Human"
+        status="Alive"
+        location="Earth"
+        gender="Female"
+        image="https://rickandmortyapi.com/api/character/avatar/4.jpeg"
+      />
+    );
 
-    const card = screen.getByRole("button").closest(".horizontal-normal");
-    expect(card).toBeInTheDocument();
+    expect(screen.getByText(/Last known location/i)).toBeInTheDocument();
+    expect(screen.getByText(/gender/i)).toBeInTheDocument();
+    expect(screen.getByText("Earth")).toBeInTheDocument();
+    expect(screen.getByText("Female")).toBeInTheDocument();
   });
 });

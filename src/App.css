@@ -2,6 +2,14 @@
     padding: 4px;
 }
 
+.MuiTabs-indicator {
+    display: none;
+}
+
+.MuiTab-textColorPrimary {
+    color: #354E18 !important;
+}
+
 @media (max-width: 640px) {
     .container-card-main {
         display: flex;

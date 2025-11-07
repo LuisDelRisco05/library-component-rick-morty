@@ -1,11 +1,11 @@
 export interface TarjetaProps {
+    id: string | number;
     name: string;
-    species: "Humano" | "Cronenbergs" | "Meeseeks" | "Arañas gigantes telépatas";
-    status: "Vivo" | "Muerto";
-    lastLocation: string;
-    firstEpisode: string;
+    species: string;
+    status: "Alive" | "Dead";
+    location: string;
     image: string;
     variant?: "vertical-normal" | "vertical-small" | "horizontal-normal";
-    genere?: "Masculino" | "Femenino" | "Desconocido",
-    onFavoriteChange?: (isFavorite: boolean) => void
+    gender?: "Male" | "Female" | "unknown",
+    onFavoriteChange?: (id: string | number, isFavorite: boolean) => void
   }  

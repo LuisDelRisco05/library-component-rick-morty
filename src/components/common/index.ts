@@ -1,3 +1,7 @@
 export * from "./CloseCircle"
 export * from "./TickCircle"
 export * from "./FavoriteIcon"
+export * from "./ButtonComponent"
+export * from "./ChipComponent"
+export * from "./SearchInput"
+export * from "./TabsComponent"
